@@ -1,12 +1,8 @@
 
 
-  
 
 
 
-
-
-  
 
 
 <!doctype html>
@@ -20,9 +16,12 @@
   
   
   
-    <meta name="description" content="">
+    <meta name="description" content="设置透明度canvas设置透明度的属性是globalAlpha，值从0(完全透明)到1(完全不透明)，它影响canvans画布里的所有图形。
+对于绘制大量透明度相同的图形的时候，可以使用globalAlpha属性设置。canvas样式的代码一般在填充(fill)和描边(stroke)之前就执行。
+ctx.globalAlpha = 0.2; // 设置图像透明度为0.2
+更方便的设置透明度的...">
   
-  <title>Archives: 2017 [ 那年夏天_LXY ]</title>
+  <title>canvas 学习笔记（二）--  设置透明度和渐变 [ 那年夏天_LXY ]</title>
   
   
     <link rel="shortcut icon" href="/favicon.ico">
@@ -41,6 +40,24 @@
 <body>
 <div class="side-navigate hide-area">
   
+    <div class="item prev">
+      <a href="/2017/10/28/canvas 学习笔记（一）-- 初识/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        canvas 学习笔记（一）-- 初识
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2017/10/28/canvas 绘制五角星/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        canvas 绘制五角星
+      </div>
+    </div>
   
 </div>
 <div id="outer-container" class="hide-area">
@@ -66,7 +83,7 @@
           </li>
         
           
-            <li class="active">
+            <li>
           
             <a href="/archives">文章</a>
             
@@ -112,122 +129,62 @@
     <div id="content-inner">
       
       
-  <article>
-    
-
-  <div id="recent-posts">
-    <h1>Archives
-    
-      <span class="posts-count">
-      Total
-      3
+  <article id="post">
+    <h1>canvas 学习笔记（二）--  设置透明度和渐变</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2017-10-28</span>
       
-        posts
-      
-      </span>
-    
-    </h1>
-    
-    
-      
-      
-        
-      
-      
-    
+        <span id = "post-title-updated">Updated at 2017-10-28</span>
       
       
       
+    </p>
     
-      
-      
-      
-    
-    
-    
-      
-      
-        
-        <h3 class="archive-year-title">2017
-        
-          <span class="posts-count">
-          Total
-          3
-          
-            posts
-          
-          </span>
-        
-        </h3>
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/10/28/canvas 学习笔记（一）-- 初识/">
-  
-    canvas 学习笔记（一）-- 初识
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">10-28</span>
-    
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-    
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/10/28/canvas 学习笔记（二）--  设置透明度和渐变/">
-  
-    canvas 学习笔记（二）--  设置透明度和渐变
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">10-28</span>
-    
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-    
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/10/28/canvas 绘制五角星/">
-  
-    canvas 绘制五角星
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">10-28</span>
-    
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-    
-  </div>
-
-
+    <h4 id="设置透明度"><a href="#设置透明度" class="headerlink" title="设置透明度"></a>设置透明度</h4><p>canvas设置透明度的属性是globalAlpha，值从0(完全透明)到1(完全不透明)，它影响canvans画布里的所有图形。</p>
+<p>对于绘制大量透明度相同的图形的时候，可以使用globalAlpha属性设置。canvas样式的代码一般在填充(fill)和描边(stroke)之前就执行。</p>
+<pre><code>ctx.globalAlpha = 0.2; // 设置图像透明度为0.2
+</code></pre><p>更方便的设置透明度的方式是直接给图形设置具有透明度的颜色，例如: </p>
+<pre><code>// 指定透明颜色，用于搭边或者填充颜色
+ ctx.strokeStyle = &quot;rgba(255,0,0,0.5)&quot;;
+ ctx.fillStyle = &quot;rgba(255,0,0,0.5)&quot;;
+</code></pre><h4 id="设置渐变"><a href="#设置渐变" class="headerlink" title="设置渐变"></a>设置渐变</h4><p>canvas可以填充线性渐变和径向渐变，分别调用createLinearGradient和createRadialGradient方法创建渐变对象，我将这个对象理解为渐变填充的方向(范围)，然后使用addColorStop()方法为对象设置颜色。</p>
+<p>线性渐变createLinearGradient(x1,y1,x2,y2)，(x1,y1)是渐变开始点，(x2,y2)是结束点；</p>
+<p>径向渐变createRadialGradient(x1,y1,r1,x2,y2,r2)和线性渐变相比，多了两个参数，渐变从圆心为(x1,y1)，半径为r1的圆到圆心为(x2,y2)，半径为r2的圆。</p>
+<p>设置渐变过程，首先创建渐变对象：</p>
+<pre><code>var lineargradient = ctx.createLinearGradient(0,0,150,150); // 创建线性渐变的对象，渐变从点(0,0)到点(150,150)
+var radialgradient = ctx.createRadialGradient(75,75,0,75,75,100) // 创建径向渐变的对象
+</code></pre><p>为前面创建的对象填充颜色，使用addColorStop(position, color)方法，这个方法接收2个参数，参数1(position)是参数2(color)作用在渐变 对象上的位置。position的值在0到1之间，0.5表示color指定的颜色作用在中间，下面是设置线性黑白渐变的例子：</p>
+<pre><code>var lineargradient = ctx.createLinearGradient(0,0,150,150);
+lineargradient.addColorStop(0,&apos;#fff&apos;);
+lineargradient.addColorStop(1,&apos;#000&apos;); // 由白到黑的线性渐变
+</code></pre>
   </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#设置透明度"><span class="toc-text">设置透明度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#设置渐变"><span class="toc-text">设置渐变</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2017/10/28/canvas 学习笔记（一）-- 初识/" class="prev">&larr; Prev post canvas 学习笔记（一）-- 初识</a>
+  
+
+  
+
+  
+    <a href="/2017/10/28/canvas 绘制五角星/" class="next">Next post canvas 绘制五角星 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
 
       
       
@@ -361,6 +318,8 @@ var unsplashConfig = {"gravity":"north"};
 var turnoffBackgroundImage = false;
 
 
+
+  turnoffBackgroundImage = true;
 
 
 var backgroundColor = "34495E";
