@@ -1,12 +1,55 @@
-extends views/main.pug
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="lingxiaoyuan"><link rel="alternative" href="/atom.xml" title="那年夏天_LXY" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>canvas 绘制五角星 - 那年夏天_LXY</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0;"><header class="head"><h1 class="head-title u-fl"><a href="/">那年夏天_LXY</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">目录</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"> <time class="post__time" datetime="2017-10-28T11:01:17.529Z">October 28, 2017</time><h1 class="post__title"><a href="/2017/10/28/canvas 绘制五角星/">canvas 绘制五角星</a></h1><div class="post__main echo"><h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>五角星的顶点落在两个圆（同心）上，外(凸)顶点落在外圆，内(凹)顶点在内圆上。</p>
+<h4 id="记住几个关键点"><a href="#记住几个关键点" class="headerlink" title="记住几个关键点"></a>记住几个关键点</h4><ul>
+<li>外圆半径–R</li>
+<li>内圆半径–r</li>
+<li>外顶点坐标(x,y)</li>
+</ul>
+<pre><code>x:Math.cos((18+72*i)/180*Math.PI)*R;
+y:Math.sin((18+72*i)/180*Math.PI)*R
+</code></pre><ul>
+<li><p>内顶点坐标(x,y)</p>
+<p> x:Math.cos((54+72<em>i)/180</em>Math.PI)<em>r;<br> y:Math.sin((54+72</em>i)/180<em>Math.PI)</em>r</p>
+</li>
+</ul>
+<p>以上五角星内外顶点公式得来，过程这里不做详细介绍。</p>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><p>下面是封装好的使用canvas绘制五角星的方法：</p>
+<pre><code>function drawStar(R,r,x,y,ctx,fillStyle) {
+    //  r、R分别是内外圆半径
+    // x、y分别是水平、垂直偏移量
 
-block head
-  title
-    = page.title + ' - ' + config.title
+    ctx.beginPath();
+    for(var i = 0; i &lt; 5; i ++) {
+        // 外顶点(x1,y1)  内顶点(x2,y2)
+        var x1 = Math.cos((18+72*i)/180*Math.PI)*R,
+            y1 = Math.sin((18+72*i)/180*Math.PI)*R,
+            x2 = Math.cos((54+72*i)/180*Math.PI)*r,
+            y2 = Math.sin((54+72*i)/180*Math.PI)*r;
 
-block main
-  include mixins/post.pug
-  +post(page, 'post')
-  
-  include plugins/reward.pug
-  include plugins/livere.pug
+        ctx.lineTo(x1 + x, y1 + y);
+        ctx.lineTo(x2 + x, y2 + y);
+    }
+
+    ctx.closePath();
+    ctx.fillStyle = fillStyle;
+    ctx.fill();
+}
+</code></pre><h4 id="例子-–-绘制指定数量-n-随机分布的星星"><a href="#例子-–-绘制指定数量-n-随机分布的星星" class="headerlink" title="例子 – 绘制指定数量(n)随机分布的星星"></a>例子 – 绘制指定数量(n)随机分布的星星</h4><pre><code>function drawRandomStars(ctx,n) {
+    // 绘制矩形背景
+    ctx.fillStyle = &apos;#382a6c&apos;;
+    ctx.fillRect(0,0,180,220);
+
+    // 绘制随机分布的星星
+    // 调用上面的函数drawStar
+    for(var i = 0; i &lt; n; i ++) {
+        ctx.save(); // 保存canvas状态，进行下一步的绘制（连续绘制）
+        var R = Math.random() * 4 + 1, // 外圆半径，内圆半径取R/2
+            x = Math.random() * 160 + 20, // 水平偏移量
+            y = Math.random() * 200 + 20, // 垂直偏移量
+            fillStyle = &apos;#fff&apos;; // 给每个星星填充白色
+
+        this.drawStar(R, R/2, x, y, ctx, fillStyle);
+    }
+}
+
+drawRandomStars(ctx,50); // 绘制50颗随机分布的星星，这里定义ctx的代码没有贴出
+</code></pre></div></header></article><div class="comments" id="lv-container" data-id="city" data-uid="your uid"><script>(function(d, s) {var j, e = d.getElementsByTagName(s)[0];if (typeof LivereTower === 'function') { return; } j = d.createElement(s);j.src = 'https://cdn-city.livere.com/js/embed.dist.js';j.async = true;e.parentNode.insertBefore(j, e);})(document, 'script');</script></div></main><footer class="foot"><div class="foot-copy">&copy; 2016-2017 lingxiaoyuan</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>
